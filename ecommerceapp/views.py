@@ -124,7 +124,7 @@ def single_product(request):
 
         if products:
             GetcategoryID = products.category.id
-            related_prods = Products.objects.filter(category=GetcategoryID).all()
+            related_prods = Products.objects.filter(category=GetcategoryID).all().order_by('-id')
     
 
 

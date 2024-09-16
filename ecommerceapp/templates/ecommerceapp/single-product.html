@@ -96,9 +96,13 @@
 							<p class="product-price"><span>Rs. {{related_prod.discount_price}}</span> </p>
 						{% else %}
 							<p class="product-price"><span>Rs. {{related_prod.price}}</span></p>
+							<p class="product-price"><span><br></span> </p>
 						{% endif %}
 						{% if related_prod.stock_quantity > 0 %}
 							<a href="/cart" class="cart-btn"><i class="fas fa-shopping-cart"></i> Add to Cart</a>
+						{% else %}
+							<br>
+							<a href="/shop" class="cart-btn"><i class="fas fa-shopping-cart"></i>Out Of Order</a>
 						{% endif %}
 	
 					</div>

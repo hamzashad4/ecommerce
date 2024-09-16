@@ -55,9 +55,13 @@
 							<p class="product-price"><span>Rs. {{product.discount_price}}</span> </p>
 						{% else %}
 							<p class="product-price"><span>Rs. {{product.price}}</span></p>
+							<p class="product-price"><span><br></span> </p>
 						{% endif %}
 						{% if product.stock_quantity > 0 %}
 							<a href="/cart" class="cart-btn"><i class="fas fa-shopping-cart"></i> Add to Cart</a>
+						{% else %}
+							<br>
+							<a href="/shop" class="cart-btn"><i class="fas fa-shopping-cart"></i>Out Of Order</a>
 						{% endif %}
 					</div>
 				</div>
