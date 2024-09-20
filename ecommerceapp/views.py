@@ -2,39 +2,29 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from .models import *
 
-def index(request):
-    settings = Settings.objects.all().first()
-    brands = Brands.objects.all()   
+
+
+def index(request): 
     categories = Categories.objects.all()
     sub_categories = Sub_categories.objects.all()
     context ={'categories':categories,
                'sub_categories':sub_categories,
-               'brands':brands,
-               'settings': settings
                }
     return render(request, 'ecommerceapp/index.html',context)
 
-def errorpage(request):
-    settings = Settings.objects.all().first()
-    brands = Brands.objects.all()   
+def errorpage(request):  
     categories = Categories.objects.all()
     sub_categories = Sub_categories.objects.all()
     context ={'categories':categories,
                'sub_categories':sub_categories,
-               'brands':brands,
-               'settings': settings
                }
     return render(request, 'ecommerceapp/404.html', context)
 
 def about(request):
-    settings = Settings.objects.all().first()
-    brands = Brands.objects.all()   
     categories = Categories.objects.all()
     sub_categories = Sub_categories.objects.all()
     context ={'categories':categories,
                'sub_categories':sub_categories,
-               'brands':brands,
-               'settings': settings
                }
     return render(request, 'ecommerceapp/about.html', context)
      
