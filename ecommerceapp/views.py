@@ -5,26 +5,42 @@ from .models import *
 
 
 def index(request): 
+    feature_products = Products.objects.filter(is_feature =True, is_active =True).order_by('-created_at')
+    trending_products = Products.objects.filter(is_trending =True, is_active =True).order_by('-created_at')
+    settings = Settings.objects.first()
+    brands = Brands.objects.all()
     categories = Categories.objects.all()
     sub_categories = Sub_categories.objects.all()
     context ={'categories':categories,
                'sub_categories':sub_categories,
+               'settings':settings,
+               'brands': brands,
+               'featured':feature_products,
+               'trending':trending_products,
                }
     return render(request, 'ecommerceapp/index.html',context)
 
-def errorpage(request):  
+def errorpage(request):
+    settings = Settings.objects.first()
+    brands = Brands.objects.all()  
     categories = Categories.objects.all()
     sub_categories = Sub_categories.objects.all()
     context ={'categories':categories,
                'sub_categories':sub_categories,
+               'settings':settings,
+               'brands': brands,
                }
     return render(request, 'ecommerceapp/404.html', context)
 
 def about(request):
+    settings = Settings.objects.first()
+    brands = Brands.objects.all()
     categories = Categories.objects.all()
     sub_categories = Sub_categories.objects.all()
     context ={'categories':categories,
                'sub_categories':sub_categories,
+               'settings':settings,
+               'brands': brands,
                }
     return render(request, 'ecommerceapp/about.html', context)
      
@@ -79,9 +95,9 @@ def shop(request):
     categoryID= request.GET.get('cat_id')
 
     if categoryID:
-        products = Products.objects.filter(category=categoryID).order_by('-id')
+        products = Products.objects.filter(category=categoryID, is_active = True).order_by('-id')
     else:
-        products = Products.objects.all().order_by('-id')
+        products = Products.objects.filter(is_active=True).order_by('-id')
 
     context ={'categories':categories,
                'sub_categories':sub_categories,

@@ -36,7 +36,7 @@ class Products(models.Model):
     description = models.TextField()
     UOM = models.ForeignKey('UOMs', on_delete=models.CASCADE)
     brand = models.ForeignKey('Brands', on_delete=models.SET_NULL, null=True, related_name ='brand')
-    category = models.ForeignKey('Categories', on_delete=models.CASCADE)
+    category = models.ForeignKey('Categories', on_delete=models.CASCADE, related_name ="products")
     price =models.DecimalField(max_digits=10, decimal_places=2)
     cost_price = models.DecimalField(max_digits=10, decimal_places=2)
     discount_price = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
@@ -44,6 +44,8 @@ class Products(models.Model):
     stock_quantity = models.DecimalField(max_digits=10, decimal_places=2)
     image = models.ImageField(upload_to='ecommerceapp/ProductImages/', null=True, blank=True)
     is_active =models.BooleanField(default=True)
+    is_feature = models.BooleanField(default=True)
+    is_trending = models.BooleanField(default=True)
     created_at =models.DateField(auto_now_add=True)
     updated_at = models.DateField(auto_now=True)
 
@@ -71,4 +73,3 @@ class Settings(models.Model):
 
     def __str__(self):
         return self.site_title
-

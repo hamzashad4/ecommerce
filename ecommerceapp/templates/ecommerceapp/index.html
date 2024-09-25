@@ -66,53 +66,101 @@
 	</div>
 	<!-- end features list section -->
 
-	<!-- product section -->
+
+	<!-- Feature product section -->
 	<div class="product-section mt-150 mb-150">
 		<div class="container">
 			<div class="row">
 				<div class="col-lg-8 offset-lg-2 text-center">
 					<div class="section-title">	
-						<h3><span class="orange-text">Our</span> Products</h3>
+						<h3><span class="orange-text">Featured</span> Products</h3>
 						<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aliquid, fuga quas itaque eveniet beatae optio.</p>
 					</div>
 				</div>
 			</div>
 
 			<div class="row">
+				{% for Product in featured %}
 				<div class="col-lg-4 col-md-6 text-center">
+					
 					<div class="single-product-item">
+						{% if Product.stock_quantity <= 0 %}
+							<H3 class="OutOfStock">Out of Stock</H3>
+						{% endif %}
 						<div class="product-image">
-							<a href="/single-product"><img src="{% static 'ecommerceapp/assets/img/products/product-img-1.jpg'%}" alt=""></a>
+							<a href="/single-product/?prod_id={{Product.id}}" width='20px'><img src="{{Product.image.url}}" alt="" ></a>
 						</div>
-						<h3>Strawberry</h3>
-						<p class="product-price"><span>Per Kg</span> 85$ </p>
-						<a href="/cart" class="cart-btn"><i class="fas fa-shopping-cart"></i> Add to Cart</a>
+						<h3 style="font-size: 18px;">{{Product.name}}</h3>
+						{% if Product.stock_quantity > 0 %}
+							<p style="color: red;">only {{ Product.stock_quantity }} available in stock</p>
+						{% endif %}
+						{% if Product.discount_price > 0 %}
+							<p class="product-price"><span><del>Rs. {{Product.price}}</del></span></p>
+							<p class="product-price"><span>Rs. {{Product.discount_price}}</span> </p>
+						{% else %}
+							<p class="product-price"><span>Rs. {{Product.price}}</span></p>
+							<p class="product-price"><span><br></span> </p>
+						{% endif %}
+						{% if Product.stock_quantity > 0 %}
+							<a href="/cart" class="cart-btn"><i class="fas fa-shopping-cart"></i> Add to Cart</a>
+						{% else %}
+							<br>
+							<a href="/shop" class="cart-btn"><i class="fas fa-shopping-cart"></i>Out Of Order</a>
+						{% endif %}
 					</div>
 				</div>
-				<div class="col-lg-4 col-md-6 text-center">
-					<div class="single-product-item">
-						<div class="product-image">
-							<a href="/single-product"><img src="{% static 'ecommerceapp/assets/img/products/product-img-2.jpg'%}" alt=""></a>
-						</div>
-						<h3>Berry</h3>
-						<p class="product-price"><span>Per Kg</span> 70$ </p>
-						<a href="/cart" class="cart-btn"><i class="fas fa-shopping-cart"></i> Add to Cart</a>
-					</div>
-				</div>
-				<div class="col-lg-4 col-md-6 offset-md-3 offset-lg-0 text-center">
-					<div class="single-product-item">
-						<div class="product-image">
-							<a href="/single-product"><img src="{% static 'ecommerceapp/assets/img/products/product-img-3.jpg'%}" alt=""></a>
-						</div>
-						<h3>Lemon</h3>
-						<p class="product-price"><span>Per Kg</span> 35$ </p>
-						<a href="/cart" class="cart-btn"><i class="fas fa-shopping-cart"></i> Add to Cart</a>
-					</div>
-				</div>
+				{% endfor %}
 			</div>
 		</div>
 	</div>
-	<!-- end product section -->
+	<!-- end Feature product section -->
+	 	<!-- Trending product section -->
+	<div class="product-section mt-150 mb-150">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-8 offset-lg-2 text-center">
+					<div class="section-title">	
+						<h3><span class="orange-text">Trending</span> Products</h3>
+						<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aliquid, fuga quas itaque eveniet beatae optio.</p>
+					</div>
+				</div>
+			</div>
+
+			<div class="row">
+				{% for Product in trending %}
+				<div class="col-lg-4 col-md-6 text-center">
+					
+					<div class="single-product-item">
+						{% if Product.stock_quantity <= 0 %}
+							<H3 class="OutOfStock">Out of Stock</H3>
+						{% endif %}
+						<div class="product-image">
+							<a href="/single-product/?prod_id={{Product.id}}" width='20px'><img src="{{Product.image.url}}" alt="" ></a>
+						</div>
+						<h3 style="font-size: 18px;">{{Product.name}}</h3>
+						{% if Product.stock_quantity > 0 %}
+							<p style="color: red;">only {{ Product.stock_quantity }} available in stock</p>
+						{% endif %}
+						{% if Product.discount_price > 0 %}
+							<p class="product-price"><span><del>Rs. {{Product.price}}</del></span></p>
+							<p class="product-price"><span>Rs. {{Product.discount_price}}</span> </p>
+						{% else %}
+							<p class="product-price"><span>Rs. {{Product.price}}</span></p>
+							<p class="product-price"><span><br></span> </p>
+						{% endif %}
+						{% if Product.stock_quantity > 0 %}
+							<a href="/cart" class="cart-btn"><i class="fas fa-shopping-cart"></i> Add to Cart</a>
+						{% else %}
+							<br>
+							<a href="/shop" class="cart-btn"><i class="fas fa-shopping-cart"></i>Out Of Order</a>
+						{% endif %}
+					</div>
+				</div>
+				{% endfor %}
+			</div>
+		</div>
+	</div>
+	<!-- end Trending product section -->
 
 	<!-- cart banner section -->
 	<section class="cart-banner pt-100 pb-100">

@@ -32,6 +32,7 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     'ecommerceapp.apps.EcommerceappConfig',
+    'jazzmin',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -48,7 +49,6 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'ecommerceapp.middleware.GeneralMiddleware'
 ]
 
 ROOT_URLCONF = 'ecommerce.urls'
@@ -132,3 +132,72 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 import os
 MEDIA_ROOT =  os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
+
+
+JAZZMIN_SETTINGS= {
+    "site_title": "Organic Grocery Admin",
+    "site_header": "Organic Grocery",
+    "site_brand": "Organic Grocery",
+    "site_logo": "ecommerceapp/assets/img/favicon.png",
+    "login_logo": "ecommerceapp/assets/img/adminlog.png",
+    "welcome_sign": "Welcome to the Organic Grocery",
+    "copyright": "Oragnic Grocery",
+    "show_ui_builder": True,
+    "show_sidebar": True,
+    "changeform_format": "vertical_tabs",
+    "icons": {
+        "auth": "fas fa-users-cog",
+        "auth.user": "fas fa-user",
+        "auth.Group": "fas fa-users",
+        "ecommerceapp.Brands":"fas fa-tag",
+        "ecommerceapp.Products":"fas fa-box-open",
+        "ecommerceapp.Categories":"fas fa-layer-group",
+        "ecommerceapp.Settings":"fa-solid fa-gear",
+        "ecommerceapp.Sub_categories":"fas fa-tags",
+        "ecommerceapp.Uoms":"fa-solid fa-scale-balanced",
+    },
+    "topmenu_links": [
+
+        {"name": "Home",  "url": "admin:index", "permissions": ["auth.view_user"]},
+        {"name": "Categories", "url":"http://127.0.0.1:8000/admin/ecommerceapp/categories/", "new_window": False},
+        {"name": "UOMs", "url":"http://127.0.0.1:8000/admin/ecommerceapp/uoms/", "new_window": False},
+        {"name": "Products", "url": "http://127.0.0.1:8000/admin/ecommerceapp/products/", "new_window": False},
+        {"name": "Brands", "url":"http://127.0.0.1:8000/admin/ecommerceapp/brands/", "new_window": False},
+        {"name": "Settings", "url":"http://127.0.0.1:8000/admin/ecommerceapp/settings/1/change/", "new_window": False},
+        {"model": "auth.User"},
+            {"app": "books"},
+    ],
+}
+
+JAZZMIN_UI_TWEAKS = {
+    "navbar_small_text": True,
+    "footer_small_text": False,
+    "body_small_text": False,
+    "brand_small_text": True,
+    "brand_colour": "navbar-light",
+    "accent": "accent-navy",
+    "navbar": "navbar-white navbar-light",
+    "no_navbar_border": False,
+    "navbar_fixed": False,
+    "layout_boxed": False,
+    "footer_fixed": True,
+    "sidebar_fixed": False,
+    "sidebar": "sidebar-light-lightblue",
+    "sidebar_nav_small_text": False,
+    "sidebar_disable_expand": False,
+    "sidebar_nav_child_indent": False,
+    "sidebar_nav_compact_style": True,
+    "sidebar_nav_legacy_style": False,
+    "sidebar_nav_flat_style": True,
+    "theme": "default",
+    "dark_mode_theme": None,
+    "button_classes": {
+        "primary": "btn-outline-primary",
+        "secondary": "btn-outline-secondary",
+        "info": "btn-info",
+        "warning": "btn-warning",
+        "danger": "btn-danger",
+        "success": "btn-success"
+    },
+    "actions_sticky_top": False
+}
