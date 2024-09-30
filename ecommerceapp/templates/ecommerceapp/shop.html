@@ -25,38 +25,33 @@
 	<div class="product-section mt-10 mb-150">
 		<div class="container">
 			<div class="col-lg-12 text-center">
-				<div class="hero__search">
-					<div class="hero__search__form">
-						<form action="#">
-							<div class="hero__search__categories">
-								All Categories
-								<span class="arrow_carrot-down"></span>
-							</div>
-							<input type="text" placeholder="What do yo u need?">
-							<button type="submit" class="site-btn">SEARCH</button>
-						</form>
+					<div class="hero__search__categories">
+			
+						<button onclick="myFunction()" class="dropbtn">Select a Category</button>
+					
+						<div id="myDropdown" class="dropdown-content">
+						<input type="text" placeholder="Search.." id="myInput" onkeyup="filterFunction()">
+						<a href="/shop">All</a>
+						{% for category in categories %}
+						<a href="/shop/{{category.id}}">{{category.name}}</a>
+						{% endfor %}	
+						</div>
 					</div>
-				</div>
-			</div>
-<!-- --------------------------------------________________________________________ -->
 
-			<div class="row dropdown">
-				<div class="col-lg-12">
-					<button onclick="myFunction()" class="dropbtn">Select a Category</button>
+					<div class="hero__search">
 				
-					<div id="myDropdown" class="dropdown-content">
-					  <input type="text" placeholder="Search.." id="myInput" onkeyup="filterFunction()">
-					  <a href="/shop">All</a>
-					  {% for category in categories %}
-					  <a href="/shop/?cat_id={{category.id}}">{{category.name}}</a>
-					  {% endfor %}	
+						<div class="hero__search__form">
+							<form method="GET" action="{% url 'ecommerceapp-product-search'%}">
+								<input type="text" name="search" placeholder="Search.....">
+								<button type="submit" class="site-btn">SEARCH</button>
+							</form>
+						</div>
 					</div>
-
-				</div>
-			  </div>
+			</div>
 			
 
 			<div class="row product-lists">
+				{% if products %}
 				{% for product in products %}
 				<div class="col-lg-4 col-md-6 text-center">
 					
@@ -65,11 +60,11 @@
 							<H3 class="OutOfStock">Out of Stock</H3>
 						{% endif %}
 						<div class="product-image">
-							<a href="/single-product/?prod_id={{product.id}}" width='20px'><img src="{{product.image.url}}" alt="" ></a>
+							<a href="/single-product/{{product.id}}" width='20px'><img src="{{product.image.url}}" alt="" ></a>
 						</div>
-						<h3 style="font-size: 18px;">{{product.name}}</h3>
+						<h3 style="font-size: 18px;">{{product.name}}</h3>6
 						{% if product.stock_quantity > 0 %}
-							<p style="color: red;">only {{ product.stock_quantity }} available in stock</p>
+							<p style="color: red;">Available in stock</p>
 						{% endif %}
 						{% if product.discount_price > 0 %}
 							<p class="product-price"><span><del>Rs. {{product.price}}</del></span></p>
@@ -86,7 +81,9 @@
 						{% endif %}
 					</div>
 				</div>
-				{% endfor %}
+				{% endfor %}{% else %}
+				<h1>No Product Found</h1>
+				{% endif %}
 			</div>
 			
 			<div class="row">

@@ -1,5 +1,6 @@
 from django.db import models
 from datetime import datetime
+from django.conf import settings
 
 
 class Categories(models.Model):
@@ -57,6 +58,7 @@ class Settings(models.Model):
     logo = models.ImageField(upload_to='ecommerceapp/settingImages/', null=True, blank=True)
     site_title = models.CharField(max_length=255)
     Sologun = models.CharField(max_length=255)
+    banner = models.ImageField(upload_to="ecommerceapp/settingImages/", null=True, blank=True)
     free_shipping = models.DecimalField(max_digits=10, decimal_places=2)
     return_days = models.PositiveIntegerField()
     copyright_year = models.CharField(max_length=255)
@@ -73,3 +75,26 @@ class Settings(models.Model):
 
     def __str__(self):
         return self.site_title
+    
+class Cart(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, blank=True, null=True)
+    session_key = models.CharField(max_length=100, null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    
+    def __str__(self):
+        return f"Cart #{self.id}, {self.session_key}"
+
+class CartItem(models.Model):
+    cart = models.ForeignKey(Cart, on_delete=models.CASCADE, related_name='items')
+    product = models.ForeignKey(Products, on_delete=models.CASCADE)
+    cost = models.DecimalField(max_digits=10, decimal_places=2)
+    price = models.DecimalField(max_digits=10, decimal_places=2)
+    quantity = models.PositiveIntegerField(default=1)
+    added_at = models.DateTimeField(auto_now_add=True)
+    
+    def __str__(self):
+        return f"{self.product.name} in Cart #{self.cart.id}"
+    
+    def get_total_price(self):
+        return self.quantity * self.product.price

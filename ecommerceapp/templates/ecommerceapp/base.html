@@ -7,7 +7,7 @@
 	<meta name="description" content="Responsive Bootstrap4 Shop Template, Created by Imran Hossain from https://imransdesign.com/">
 
 	<!-- title -->
-	<title>Fruitkha</title>
+	<title>{{title}}</title>
 	{% load static %}
 	<!-- favicon -->
 	<link rel="shortcut icon" type="image/png" href="{{settings.favicon.url}}">
@@ -32,9 +32,34 @@
 	<link rel="stylesheet" href="{% static 'ecommerceapp/assets/css/responsive.css'%}">
 
 	<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
-
+	<link
+	rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css"
+  />
+	<script src="{% static 'website/js/jquery-3.3.1.min.js' %}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    <script>
+      toastr.options = {
+        "closeButton": true,
+        "debug": false,
+        "newestOnTop": false,
+        "progressBar": false,
+        "positionClass": "toast-top-right",
+        "preventDuplicates": false,
+        "onclick": null,
+        "showDuration": "300",
+        "hideDuration": "1000",
+        "timeOut": "5000",
+        "extendedTimeOut": "1000",
+        "showEasing": "swing",
+        "hideEasing": "linear",
+        "showMethod": "fadeIn",
+        "hideMethod": "fadeOut"
+      }
+    </script>
 </head>
 <body>
+
 	
 	<!--PreLoader-->
     <div class="loader">
@@ -93,9 +118,19 @@
 								<li>
 									<div class="header-icons">
 										<a class="shopping-cart" href="/cart"><i class="fas fa-shopping-cart"></i></a>
-										<a class="mobile-hide search-bar-icon" href="#"><i class="fas fa-search"></i></a>
+										<a href="#"><i class="fas fa-user"></i></a>
+											<ul class="sub-menu">
+												{% if user.is_authenticated %}
+												<h6>welcome <br>{{user.username}}!</h6>
+												<li><a href="{% url 'logout' %}"><span class="glyphicon glyphicon-log-out"></span>   Logout</a></li>
+												{% else %}
+												<li><a href="{% url 'signup' %}"><span class="glyphicon glyphicon-user"></span>   Sign up</a></li>
+												<li><a href="{% url 'login' %}"><span class="glyphicon glyphicon-log-in"></span>   Log in</a></li>
+												{% endif %}
+											</ul>
 									</div>
 								</li>
+
 							</ul>
 						</nav>
 						<a class="mobile-show search-bar-icon" href="#"><i class="fas fa-search"></i></a>
@@ -107,6 +142,19 @@
 		</div>
 	</div>
 	<!-- end header -->
+	{% if messages %}
+    {% for message in messages %}
+        {% if message.tags == 'success'%}
+            <script type=text/javascript>toastr.{{ message.tags }}('{{ message }}')</script>
+        {% elif message.tags == 'info' %}
+            <script type=text/javascript>toastr.{{ message.tags }}('{{ message }}')</script>
+        {% elif message.tags == 'warning' %}
+            <script type=text/javascript>toastr.{{ message.tags }}('{{ message }}')</script>
+        {% elif message.tags == 'error' %}
+            <script type=text/javascript>toastr.{{ message.tags }}('{{ message }}')</script>
+        {% endif %}
+    {% endfor %}
+    {% endif %}
 	
 	<!-- search area -->
 	<div class="search-area">

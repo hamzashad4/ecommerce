@@ -39,16 +39,16 @@
 						<p class="single-product-pricing"><span>Per {{products.UOM}}</span>Rs. {{products.price}}</p>
 						{% endif %}
 						<p>{{products.description}}</p>
-						{% if products.stock_quantity > 0 %}
-							<p style="color: red;">only {{ products.stock_quantity }} available in stock</p>
-						{% endif %}
 						<div class="single-product-form">
-							<form action="/">
+							<form  action="/">
 								<input type="number" placeholder="0">
 							</form>
 							{% if products.stock_quantity > 0 %}
 							<a href="/cart" class="cart-btn"><i class="fas fa-shopping-cart"></i> Add to Cart</a>
 						{% endif %}
+							{% if products.stock_quantity > 0 %}
+							<p><strong>Availability: </strong>In Stock</p>
+							{% endif %}
 							<p><strong>Categories: </strong>{{products.category}}</p>
 							<p><strong>Brand: </strong>{{products.brand}}</p>
 						</div>
@@ -85,11 +85,11 @@
 							<H3 class="OutOfStock">Out of Stock</H3>
 						{% endif %}
 						<div class="product-image">
-							<a href="/single-product/?prod_id={{related_prod.id}}"><img src="{{related_prod.image.url}}" alt=""></a>
+							<a href="/single-product/{{related_prod.id}}"><img src="{{related_prod.image.url}}" alt=""></a>
 						</div>
 						<h3>{{related_prod.name}}</h3>
 						{% if related_prod.stock_quantity > 0 %}
-							<p style="color: red;">only {{ related_prod.stock_quantity }} available in stock</p>
+							<p style="color: red;">Available in stock</p>
 						{% endif %}
 						{% if related_prod.discount_price > 0 %}
 							<p class="product-price"><span><del>Rs. {{related_prod.price}}</del></span></p>

@@ -1,0 +1,33 @@
+{% extends 'ecommerceapp/base.html '%}
+{% load crispy_forms_tags %}
+{% load static %}
+{% block content %}
+	<!-- breadcrumb-section -->
+	<div class="breadcrumb-section breadcrumb-bg">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-8 offset-lg-2 text-center">
+					<div class="breadcrumb-text">
+						<h1>Sign Up</h1>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- end breadcrumb section -->
+	<div class="content-section col-md-8 col-md-offset-2 align-items-center justify-content-center">
+		<div>
+		<form method="POST" style="border: 1px solid black; margin: 4%; padding:10%; border-radius:1%;">
+		  {% csrf_token %}
+		  <fieldset class="form-group">
+			{{ form|crispy}}
+		  </fieldset>
+		  <center>
+			<button style="background: black; padding:2%; font-size: 2rem; color:white;" class="btn btn-outline-info" type="submit"><span class="glyphicon glyphicon-check"></span>   sign up</button>
+		  </center>
+		  <br />
+		  <sub><a href="{% url 'login' %}" style="text-decoration: none; color: blue; padding:3%; cursor:pointer;">Already have an account ?</a></sub>
+		</form>
+		</div>
+	  </div>
+{% endblock %}

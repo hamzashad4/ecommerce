@@ -3,6 +3,14 @@
 {% block content %}
 {% load static %}
 <!-- hero area -->
+	<style>
+	.hero-bg {
+		background-image: url('{{settings.banner.url}}');
+		background-size: cover;
+		background-position: center;
+		background-attachment: fixed;
+		}
+	</style>
 	<div class="hero-area hero-bg">
 		<div class="container">
 			<div class="row">
@@ -88,11 +96,11 @@
 							<H3 class="OutOfStock">Out of Stock</H3>
 						{% endif %}
 						<div class="product-image">
-							<a href="/single-product/?prod_id={{Product.id}}" width='20px'><img src="{{Product.image.url}}" alt="" ></a>
+							<a href="/single-product/{{Product.id}}" width='20px'><img src="{{Product.image.url}}" alt="" ></a>
 						</div>
 						<h3 style="font-size: 18px;">{{Product.name}}</h3>
 						{% if Product.stock_quantity > 0 %}
-							<p style="color: red;">only {{ Product.stock_quantity }} available in stock</p>
+							<p style="color: red;">Available in stock</p>
 						{% endif %}
 						{% if Product.discount_price > 0 %}
 							<p class="product-price"><span><del>Rs. {{Product.price}}</del></span></p>
@@ -115,7 +123,7 @@
 	</div>
 	<!-- end Feature product section -->
 	 	<!-- Trending product section -->
-	<div class="product-section mt-150 mb-150">
+	<div class="trending-section">
 		<div class="container">
 			<div class="row">
 				<div class="col-lg-8 offset-lg-2 text-center">
@@ -135,11 +143,11 @@
 							<H3 class="OutOfStock">Out of Stock</H3>
 						{% endif %}
 						<div class="product-image">
-							<a href="/single-product/?prod_id={{Product.id}}" width='20px'><img src="{{Product.image.url}}" alt="" ></a>
+							<a href="/single-product/{{Product.id}}" width='20px'><img src="{{Product.image.url}}" alt="" ></a>
 						</div>
 						<h3 style="font-size: 18px;">{{Product.name}}</h3>
 						{% if Product.stock_quantity > 0 %}
-							<p style="color: red;">only {{ Product.stock_quantity }} available in stock</p>
+							<p style="color: red;">Available in stock</p>
 						{% endif %}
 						{% if Product.discount_price > 0 %}
 							<p class="product-price"><span><del>Rs. {{Product.price}}</del></span></p>
