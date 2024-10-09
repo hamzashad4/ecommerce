@@ -35,7 +35,7 @@
 						    <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
 						      <div class="card-body">
 						        <div class="billing-address-form">
-									<form method="post" action="{% url 'ecommerceapp-place-order' %}">
+									<form action="{% url 'ecommerceapp-place-order' %}" method="post">
 										{% csrf_token %}
 						        		<p><input type="text" placeholder="First Name" name="first_name"></p>
 										<p><input type="text" placeholder="Last Name" name="last_name"></p>
@@ -45,7 +45,7 @@
 										<p><input type="text" placeholder="City" name="city"></p>
 										<p><input type="text" placeholder="ZIP Code" name="zip"></p>
 						        		<p><input type="text" placeholder="Address" name="address"></p>
-						        		<p><textarea name="bill" id="bill" cols="30" rows="10" placeholder="Say Something" note="note"></textarea></p>
+						        		<p><textarea id="bill" cols="30" rows="10" placeholder="Say Something" name="note"></textarea></p>
 						        </div>
 						      </div>
 						    </div>

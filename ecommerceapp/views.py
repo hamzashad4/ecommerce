@@ -153,7 +153,7 @@ def placeOrder(request):
        address = request.POST.get('address')
        note = request.POST.get('note')
        payment = request.POST.get('peyment')
-       order = models.Order.objects.create(cart_id=cart.id, first_name=first_name, last_name=last_name, email=email, phone=phone, country=country, city=city, zip=zip, note=note, address=address, payment=payment, total=request.data["total"])
+       order = models.Order.objects.create(cart_id=cart.id, first_name=first_name, last_name=last_name, email=email, phone=phone, country=country, city=city, zip=zip, address=address, note=note,payment=payment, total=request.data["total"])
        
        request.session.flush() #to delete session key from session
        
