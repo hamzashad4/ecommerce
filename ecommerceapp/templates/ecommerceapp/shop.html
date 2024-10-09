@@ -62,7 +62,7 @@
 						<div class="product-image">
 							<a href="/single-product/{{product.id}}" width='20px'><img src="{{product.image.url}}" alt="" ></a>
 						</div>
-						<h3 style="font-size: 18px;">{{product.name}}</h3>6
+						<h3 style="font-size: 18px;">{{product.name}}</h3>
 						{% if product.stock_quantity > 0 %}
 							<p style="color: red;">Available in stock</p>
 						{% endif %}
@@ -74,7 +74,7 @@
 							<p class="product-price"><span><br></span> </p>
 						{% endif %}
 						{% if product.stock_quantity > 0 %}
-							<a href="/cart" class="cart-btn"><i class="fas fa-shopping-cart"></i> Add to Cart</a>
+							<a href="/cart/add/{{product.id}}" class="cart-btn"><i class="fas fa-shopping-cart"></i> Add to Cart</a>
 						{% else %}
 							<br>
 							<a href="/shop" class="cart-btn"><i class="fas fa-shopping-cart"></i>Out Of Order</a>

@@ -36,7 +36,7 @@
 	rel="stylesheet"
 	href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css"
   />
-	<script src="{% static 'website/js/jquery-3.3.1.min.js' %}"></script>
+	<script src="{% static 'ecommerceapp/assets/js/jquery-3.3.1.min.js' %}"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
     <script>
       toastr.options = {
@@ -115,10 +115,16 @@
 										<li><a href="/cart">Cart</a></li>
 									</ul>
 								</li>
+
+								
+								
 								<li>
 									<div class="header-icons">
 										<a class="shopping-cart" href="/cart"><i class="fas fa-shopping-cart"></i></a>
-										<a href="#"><i class="fas fa-user"></i></a>
+									</div>
+									</li>
+									<li>
+										<a href="#" class="user-icon" ><i class="fas fa-user"></i></a>
 											<ul class="sub-menu">
 												{% if user.is_authenticated %}
 												<h6>welcome <br>{{user.username}}!</h6>
@@ -128,9 +134,8 @@
 												<li><a href="{% url 'login' %}"><span class="glyphicon glyphicon-log-in"></span>   Log in</a></li>
 												{% endif %}
 											</ul>
-									</div>
-								</li>
-
+									
+									</li>
 							</ul>
 						</nav>
 						<a class="mobile-show search-bar-icon" href="#"><i class="fas fa-search"></i></a>
@@ -319,6 +324,5 @@ function filterFunction() {
 }
 
 	</script>
-
 </body>
 </html>

@@ -1,6 +1,7 @@
 from django.db import models
 from datetime import datetime
 from django.conf import settings
+from django.utils import timezone
 
 
 class Categories(models.Model):
@@ -97,4 +98,47 @@ class CartItem(models.Model):
         return f"{self.product.name} in Cart #{self.cart.id}"
     
     def get_total_price(self):
-        return self.quantity * self.product.price
+        product_price = self.product.price
+        discount_price = self.product.discount_price 
+        if discount_price is not None and discount_price  > 0:
+            return self.quantity * discount_price
+        else:
+            return self.quantity * product_price
+        
+class Deal(models.Model):
+    deal_name = models.CharField(max_length=100)
+    product =models.ForeignKey(Products, on_delete=models.CASCADE)
+    Deal_Image =models.ImageField(upload_to='ecommerceapp/deal', null=True, blank=True)
+    description = models.TextField()
+    end_date = models.DateField()
+    is_active = models.BooleanField(default=True)
+
+    def __str__(self):
+        return self.deal_name
+
+
+class Order(models.Model):
+    STATUS_CHOICES = [
+        ('pending', 'Pending'),
+        ('inprocess', 'In Process'),
+        ('packed', 'Packed'),
+        ('shipped', 'Shipped'),
+        ('delivered','Delivered'),
+    ]
+    cart = models.ForeignKey(Cart, on_delete=models.CASCADE, related_name="orders")
+    first_name = models.CharField(max_length=100)
+    last_name = models.CharField(max_length=100)
+    email = models.EmailField()
+    phone = models.CharField(max_length=100)
+    address = models.TextField()
+    country = models.CharField(max_length=100)
+    city = models.CharField(max_length=100)
+    zip = models.CharField(max_length=100)
+    note = models.TextField()
+    payment = models.CharField(max_length=100)
+    total = models.DecimalField(max_digits=10, decimal_places=2)
+    status = models.CharField(max_length=100, default="pending", choices=STATUS_CHOICES)
+    added_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Order# {self.id}"

@@ -20,14 +20,14 @@
 	<div class="checkout-section mt-150 mb-150">
 		<div class="container">
 			<div class="row">
-				<div class="col-lg-8">
+				<div class="col-lg-7">
 					<div class="checkout-accordion-wrap">
 						<div class="accordion" id="accordionExample">
 						  <div class="card single-accordion">
 						    <div class="card-header" id="headingOne">
 						      <h5 class="mb-0">
 						        <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-						          Billing Address
+						          Shipping Address
 						        </button>
 						      </h5>
 						    </div>
@@ -35,18 +35,22 @@
 						    <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
 						      <div class="card-body">
 						        <div class="billing-address-form">
-						        	<form action="/">
-						        		<p><input type="text" placeholder="Name"></p>
-						        		<p><input type="email" placeholder="Email"></p>
-						        		<p><input type="text" placeholder="Address"></p>
-						        		<p><input type="tel" placeholder="Phone"></p>
-						        		<p><textarea name="bill" id="bill" cols="30" rows="10" placeholder="Say Something"></textarea></p>
-						        	</form>
+									<form method="post" action="{% url 'ecommerceapp-place-order' %}">
+										{% csrf_token %}
+						        		<p><input type="text" placeholder="First Name" name="first_name"></p>
+										<p><input type="text" placeholder="Last Name" name="last_name"></p>
+						        		<p><input type="email" placeholder="Email" name="email"></p>
+										<p><input type="tel" placeholder="Phone" name="phone"></p>
+										<p><input type="text" placeholder="Country" name="country"></p>
+										<p><input type="text" placeholder="City" name="city"></p>
+										<p><input type="text" placeholder="ZIP Code" name="zip"></p>
+						        		<p><input type="text" placeholder="Address" name="address"></p>
+						        		<p><textarea name="bill" id="bill" cols="30" rows="10" placeholder="Say Something" note="note"></textarea></p>
 						        </div>
 						      </div>
 						    </div>
 						  </div>
-						  <div class="card single-accordion">
+						  <!-- <div class="card single-accordion">
 						    <div class="card-header" id="headingTwo">
 						      <h5 class="mb-0">
 						        <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
@@ -61,12 +65,12 @@
 						        </div>
 						      </div>
 						    </div>
-						  </div>
+						  </div> -->
 						  <div class="card single-accordion">
 						    <div class="card-header" id="headingThree">
 						      <h5 class="mb-0">
 						        <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-						          Card Details
+						          Payment Method
 						        </button>
 						      </h5>
 						    </div>
@@ -74,6 +78,12 @@
 						      <div class="card-body">
 						        <div class="card-details">
 						        	<p>Your card details goes here.</p>
+									<p><input 
+										type="radio" 
+										placeholder="Cash On Delivery" 
+										name="payment"
+										value="Cash On Delivery"> Cash On Delivery</p>
+
 						        </div>
 						      </div>
 						    </div>
@@ -83,51 +93,48 @@
 					</div>
 				</div>
 
-				<div class="col-lg-4">
+				<div class="col-lg-5">
 					<div class="order-details-wrap">
 						<table class="order-details">
 							<thead>
 								<tr>
-									<th>Your order Details</th>
-									<th>Price</th>
+									<th colspan="2"><b>Your order Details</b></th>
+									<th><b>Price</b></th>
 								</tr>
 							</thead>
 							<tbody class="order-details-body">
 								<tr>
-									<td>Product</td>
-									<td>Total</td>
+									<td><b>Product</b></td>
+									<td><b>Quantity</b></td>
+									<td><b>Total</b></td>
 								</tr>
+								{% for item in cart_items %}
 								<tr>
-									<td>Strawberry</td>
-									<td>$85.00</td>
+									<td>{{item.product.name}}</td>
+									<td class="text-center">{{item.quantity}}</td>
+									<td>Rs. {{item.get_total_price}}</td>
 								</tr>
-								<tr>
-									<td>Berry</td>
-									<td>$70.00</td>
-								</tr>
-								<tr>
-									<td>Lemon</td>
-									<td>$35.00</td>
-								</tr>
+								{% endfor %}
 							</tbody>
 							<tbody class="checkout-details">
 								<tr>
 									<td>Subtotal</td>
-									<td>$190</td>
+									<td colspan="2" class="text-center">Rs. {{total}}</td>
 								</tr>
 								<tr>
 									<td>Shipping</td>
-									<td>$50</td>
+									<td colspan="2" class="text-center">Rs. {{shipping_charges}}</td>
 								</tr>
 								<tr>
 									<td>Total</td>
-									<td>$240</td>
+									<td colspan="2" class="text-center">Rs. {{grand_total}}</td>
 								</tr>
 							</tbody>
 						</table>
-						<a href="#" class="boxed-btn">Place Order</a>
+						<button type="submit" class="boxed-btn">Place Order</a>
 					</div>
 				</div>
+			</form>
 			</div>
 		</div>
 	</div>

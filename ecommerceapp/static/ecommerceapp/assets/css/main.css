@@ -416,6 +416,14 @@ a.boxed-btn {
   color: #fff;
   padding: 10px 20px;
 }
+button.boxed-btn {
+  font-family: 'Poppins', sans-serif;
+  display: inline-block;
+  background-color: #F28123;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+}
 
 a.bordered-btn {
   font-family: 'Poppins', sans-serif;
@@ -440,6 +448,9 @@ a.read-more-btn:hover {
 }
 
 a.boxed-btn, a.bordered-btn, a.cart-btn {
+  border-radius: 50px;
+}
+button.boxed-btn, a.bordered-btn, a.cart-btn {
   border-radius: 50px;
 }
 
@@ -604,7 +615,11 @@ nav.main-menu ul li:last-child a {
   display: inline-block;
 }
 
+
 nav.main-menu > ul li:last-child {
+  float: right;
+}
+nav.main-menu > ul > li:nth-last-child(2) {
   float: right;
 }
 
@@ -668,7 +683,6 @@ nav.mean-nav > ul > li:first-child > a {
   display: inline-block;
   padding: 10px;
 }
-
 .site-logo {
   padding: 6px 0;
 }
@@ -1011,10 +1025,22 @@ a.boxed-btn {
   transition: 0.3s;
 }
 
+button.boxed-btn {
+  -webkit-transition: 0.3s;
+  -o-transition: 0.3s;
+  transition: 0.3s;
+}
+
 a.boxed-btn:hover {
   background-color: #051922;
   color: #F28123;
 }
+
+button.boxed-btn:hover {
+  background-color: #051922;
+  color: #F28123;
+}
+
 
 a.bordered-btn {
   -webkit-transition: 0.3s;
@@ -1242,7 +1268,17 @@ a.cart-btn {
   transition: 0.3s;
 }
 
+button.cart-btn {
+  -webkit-transition: 0.3s;
+  -o-transition: 0.3s;
+  transition: 0.3s;
+}
+
 a.cart-btn:hover {
+  background-color: #051922;
+  color: #F28123;
+}
+button.cart-btn:hover {
   background-color: #051922;
   color: #F28123;
 }
@@ -1316,7 +1352,7 @@ ul.product-share li:hover a {
   -webkit-transition: 0.3s;
   -o-transition: 0.3s;
   transition: 0.3s;
-  max-height: 490px;
+
 }
 
 .single-product-item:hover {
@@ -2440,7 +2476,19 @@ a.cart-btn {
   padding: 10px 10px;
 }
 
+button.cart-btn {
+  font-family: 'Poppins', sans-serif;
+  display: inline-block;
+  background-color: #F28123;
+  color: #fff;
+  padding: 10px 10px;
+  border: none;
+}
+
 a.cart-btn i {
+  margin-right: 5px;
+}
+button.cart-btn i {
   margin-right: 5px;
 }
 
@@ -2486,6 +2534,10 @@ input[type="number"] {
 }
 
 .single-product-form a.cart-btn {
+  margin-bottom: 15px;
+}
+
+.single-product-form button.cart-btn {
   margin-bottom: 15px;
 }
 

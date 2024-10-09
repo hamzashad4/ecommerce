@@ -40,12 +40,13 @@
 						{% endif %}
 						<p>{{products.description}}</p>
 						<div class="single-product-form">
-							<form  action="/">
-								<input type="number" placeholder="0">
-							</form>
+							<form  method="post" action="{% url 'add_to_cart' products.id %}">
+							{% csrf_token %}
+								<input type="number" name="quantity" value="1" />
 							{% if products.stock_quantity > 0 %}
-							<a href="/cart" class="cart-btn"><i class="fas fa-shopping-cart"></i> Add to Cart</a>
-						{% endif %}
+							<button type="submit" class="cart-btn"><i class="fas fa-shopping-cart"></i> Add to Cart</button>
+							</form>
+							{% endif %}
 							{% if products.stock_quantity > 0 %}
 							<p><strong>Availability: </strong>In Stock</p>
 							{% endif %}

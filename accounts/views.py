@@ -36,14 +36,17 @@ def login_view(request):
             user = form.get_user()
             if user.is_superuser:
                 login(request, user)
+                messages.add_message(request, messages.SUCCESS, "Successfully Login")
                 return redirect('/admin')  # Redirect to home page after successful login
             elif user.is_staff:
                 login(request, user)
+                messages.add_message(request, messages.SUCCESS, "Successfully Login")
                 return redirect('/admin')
             else:
                 login(request, user)
+                messages.add_message(request, messages.SUCCESS, "Successfully Login")
                 return redirect('/')
-        messages.add_message(request, messages.SUCCESS, "Successfully Login")
+        
     else:
         form = AuthenticationForm()
     
@@ -59,5 +62,6 @@ def logout_view(request):
     if request.method == 'GET':
         logout(request)
         HttpResponse("Success")
-        return redirect('/')
     messages.add_message(request, messages.SUCCESS, "Successfully Logout")
+    return redirect('/')
+    
