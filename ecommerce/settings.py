@@ -115,7 +115,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Karachi'
 
 USE_I18N = True
 
@@ -165,9 +165,9 @@ JAZZMIN_SETTINGS= {
         "ecommerceapp.Brands":"fas fa-tag",
         "ecommerceapp.Products":"fas fa-box-open",
         "ecommerceapp.Categories":"fas fa-layer-group",
-        "ecommerceapp.Settings":"fa-solid fa-gear",
+        "ecommerceapp.Settings":"fas fa-gear",
         "ecommerceapp.Sub_categories":"fas fa-tags",
-        "ecommerceapp.Uoms":"fa-solid fa-scale-balanced",
+        "ecommerceapp.Uoms":"fas fa-scale-balanced",
     },
     "topmenu_links": [
 

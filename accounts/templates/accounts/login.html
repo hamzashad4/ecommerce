@@ -8,15 +8,16 @@
 			<div class="row">
 				<div class="col-lg-8 offset-lg-2 text-center">
 					<div class="breadcrumb-text">
-						<h1>Login In</h1>
+						<h1>Log In</h1>
 					</div>
 				</div>
 			</div>
 		</div>
 	</div>
 	<!-- end breadcrumb section -->
-<div class="content-section col-md-8 col-md-offset-2 mt-100">
-	<form method="POST" style="border: 1px solid black; align-content: center; padding:10%; border-radius:1%;">
+	
+<div class="content-section col-md-12   mt-10" style="display: flex; justify-content: center; align-items: center; height: 100vh;">
+	<form method="POST" style="width: 40%; border: 1px solid black; align-content: center; padding:2%; border-radius:1%;">
 	  {% csrf_token %}
 	  <fieldset class="form-group">
 		{{ form |crispy}}

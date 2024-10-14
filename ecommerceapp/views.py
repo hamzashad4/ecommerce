@@ -1,9 +1,10 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse
 from .models import *
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.utils import timezone
+from django.template.loader import render_to_string
 
 
 
@@ -46,6 +47,9 @@ def about(request):
 def get_or_create_cart(request):
     session_key = request.session.session_key
     if request.user.is_authenticated:
+        if not session_key:
+            request.session.create()
+            session_key = request.session.session_key
         cart, created = Cart.objects.get_or_create(user=request.user)
     else:
         if not session_key:
@@ -79,19 +83,22 @@ def cart(request):
 
 def add_to_cart(request, product_id):
     product = Products.objects.filter(id=product_id).first()
-    cart = get_or_create_cart(request)
     quantity = int(request.POST.get("quantity", 1))
+    if product.stock_quantity >= quantity:
+        cart = get_or_create_cart(request)
+        cart_item, created = CartItem.objects.get_or_create(cart=cart, product=product, cost=product.cost_price, price=product.price,  total=quantity*product.price)
 
-    cart_item, created = CartItem.objects.get_or_create(cart=cart, product=product, cost=product.cost_price, price=product.price)
-    
-    if not created:
-        cart_item.quantity += quantity
-        cart_item.save()
+        if not created:
+            cart_item.quantity += quantity
+            cart_item.total = cart_item.quantity * cart_item.price
+            cart_item.save()
+        else:
+            cart_item.quantity = quantity
+            cart_item.save()
+        messages.add_message(request, messages.SUCCESS, "Product added to Cart")
     else:
-        cart_item.quantity = quantity
-        cart_item.save()
+        messages.add_message(request, messages.ERROR, f"Available quantity is {product.stock_quantity}")
 
-    messages.add_message(request, messages.SUCCESS, "Product added to Cart")
     return redirect('ecommerceapp-home')
 
 def delete_cart_item(request, item_id):
@@ -105,16 +112,21 @@ def update_cart_item(request):
     if request.method == 'POST':
         item_ids = request.POST.getlist("cart_item_ids")
         quantities = request.POST.getlist("quantities")
-
         for item_id, quantity in zip(item_ids, quantities):
             quantity = int(quantity)
             if quantity > 0:
                 cart_item = CartItem.objects.filter(id=item_id).first()
-                cart_item.quantity = quantity
-                cart_item.save()
+                if cart_item.product.stock_quantity >= quantity:
+                    cart_item.quantity = quantity
+                    cart_item.total = cart_item.quantity * cart_item.price
+                    cart_item.save()
+                    messages.add_message(request, messages.SUCCESS, "Cart updated successfully...")
+                else:
+                    messages.add_message(request, messages.SUCCESS, f"{cart_item.product.stock_quantity} Qty of {cart_item.product.name} available")
+                    break
             else:
                 CartItem.objects.filter(id=item_id).delete()
-        messages.add_message(request, messages.SUCCESS, "Cart updated successfully...")
+                messages.add_message(request, messages.SUCCESS, "Cart updated successfully...")
 
     return redirect('ecommerceapp-cart')
 
@@ -142,7 +154,14 @@ def checkout(request):
 def placeOrder(request):
     if request.method == "POST":
        cart = get_or_create_cart(request)
-       
+       cart_items =CartItem.objects.filter(cart_id=cart.id)
+       cost = 0
+       price = 0
+       for item in cart_items:
+           cost += item.cost*item.quantity
+           price += item.price*item.quantity
+        
+       profit = price-cost
        first_name = request.POST.get('first_name')
        last_name = request.POST.get('last_name')
        email = request.POST.get('email')
@@ -153,12 +172,92 @@ def placeOrder(request):
        address = request.POST.get('address')
        note = request.POST.get('note')
        payment = request.POST.get('payment')
-       order = Order.objects.create(cart_id=cart.id, first_name=first_name, last_name=last_name, email=email, phone=phone, country=country, city=city, zip=zip, address=address, note=note,payment=payment, total=request.data["total"])
+       if request.user.is_authenticated:
+            order = Order.objects.create(user=request.user, cart_id=cart.id, first_name=first_name, last_name=last_name, email=email, phone=phone, country=country, city=city, zip=zip, address=address, note=note,payment=payment, cost=cost, price=price, profit=profit, total=request.data["total"])
+       else:
+           order = Order.objects.create(cart_id=cart.id, first_name=first_name, last_name=last_name, email=email, phone=phone, country=country, city=city, zip=zip, address=address, note=note,payment=payment, cost=cost, price=price, profit=profit, total=request.data["total"])
+       context = {
+                    "order":order,
+                    "cart_items": cart_items,
+                    "settings": Settings.objects.first(),
+               }
        
-       request.session.flush() #to delete session key from session
+
+       for item in cart_items:
+           OrderItems.objects.create(
+               order = order,
+               product = item.product,
+               cost =item.cost,
+               price = item.price,
+               quantity = item.quantity,
+               total = item.total,
+           )
+           product = get_object_or_404(Products, id = item.product.id)
+           product.stock_quantity -= item.quantity
+           product.save()
+
+
+       cart_items.delete()  
+       if request.user.is_authenticated:
+           pass
+       else:      
+        request.session.flush()
+    
        
        messages.add_message(request, messages.SUCCESS, f"Your order has been placed! Order # {order.id}")
-       return redirect('ecommerceapp-home')
+       return redirect('ecommerceapp-invoice', order_id=order.id)
+
+def invoice_view(request, order_id):
+    order = Order.objects.get(id=order_id)
+    order_items = OrderItems.objects.filter(order_id = order.id)
+    sub_total = 0
+    for item in order_items:
+        sub_total += item.total
+    if sub_total >= 1500:
+        shipping_charges = 0
+    else:
+        shipping_charges = 100
+    
+    grand_total = sub_total+shipping_charges
+
+    context = {
+                    "sub_total":sub_total,
+                    "shipping_charges":shipping_charges,
+                    "grand_total":grand_total,
+                    "order":order,
+                    "order_items": order_items,
+                    "settings": Settings.objects.first(),
+                    "count": request.data["cart_count"],
+               }
+
+    return render(request, 'ecommerceapp/invoice.html', context)
+    
+def tracking(request):
+    if request.user.is_authenticated:
+        orders = Order.objects.filter(user=request.user).order_by('-id')
+    else:
+        orders = False
+    context ={
+            "orders":orders,
+            "categories": Categories.objects.all(),
+            "settings": Settings.objects.first(),
+                "brands": Brands.objects.all(), 
+                "title":"tracking",
+               }
+    return render(request, 'ecommerceapp/tracking.html', context)
+def order_track(request):
+    query = request.GET.get('order_number')
+    orders = Order.objects.filter(id=query)
+    # order_items = OrderItems.objects.filter(order_id=orders.id)
+    context ={
+                "orders":orders,
+                # "order_items":order_items,
+                "categories": Categories.objects.all(),
+                "settings": Settings.objects.first(),
+                "brands": Brands.objects.all(), 
+                "title":"tracking",
+               }
+    return render(request, 'ecommerceapp/tracking.html', context)
 
 def contact(request):
     context ={"categories": Categories.objects.all(),

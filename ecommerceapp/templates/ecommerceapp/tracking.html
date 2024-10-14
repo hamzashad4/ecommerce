@@ -1,0 +1,71 @@
+{% extends 'ecommerceapp/base.html' %}
+{% load crispy_forms_tags %}
+{% load static %}
+{% block content %}
+	<!-- breadcrumb-section -->
+	<div class="breadcrumb-section breadcrumb-bg">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-8 offset-lg-2 text-center">
+					<div class="breadcrumb-text">
+						<h1>Track Your Order</h1>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- end breadcrumb section -->
+
+    <div class="col-lg-12 text-center">
+        <div class="hero__search col-lg-6 offset-lg-3 text-center">
+            <div class="hero__search__form">
+                <form method="GET" action="{% url 'ecommerceapp-order-track'%}">
+                    <input type="text" name="order_number" placeholder="Enter Your Order Number">
+                    <button type="submit" class="site-btn">Track</button>
+                </form>
+            </div>
+        </div>
+</div>
+
+
+<div class="container mt-5">
+    <!-- Order Details Table -->
+    <div class="card">
+        <div class="card-body">
+            <h4 class="card-title">Order Information</h4>
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Order ID</th>
+                        <th>Reciver Name</th>
+                        <th>Status</th>
+                        <th>Total Amount</th>
+                        <th>Estimated Delivery</th>
+                        <th>Invoice</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% if orders %}
+                    {% for order in orders %}
+                    <tr>
+                        <td>{{order.id}}</td>
+                        <td>{{order.first_name}} {{order.last_name}}</td>
+                        <td>{{order.status}}</td>
+                        <td>Rs. {{order.price}}</td>
+                        <td>Within 3-4 hrs</td>
+                        
+                        <td><a href="/invoice/{{order.id}}">Order Detail</a></td>
+                    </tr>
+                    {% endfor %}
+                    {%else%}
+                    <tr>
+                        <td colspan="6" class="text-center">Data Not Found!</td>
+                    </tr>
+                    {% endif %}
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}
