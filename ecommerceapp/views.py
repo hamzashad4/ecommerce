@@ -15,6 +15,7 @@ def index(request):
     deal = Deal.objects.filter(is_active=True).first()
     percentage = ((((deal.product.price-deal.product.discount_price))/(deal.product.price))*100).__round__(2)
 
+
     context ={
             "count": request.data["cart_count"],
             "categories": Categories.objects.all(),
@@ -307,6 +308,14 @@ def news(request):
 
 def shop(request):
     products = Products.objects.filter(is_active=True).order_by('-id')
+
+    for product in products:
+        if product.discount_price == 0:
+            percentage = 0
+        else:
+            percentage = (((product.price-product.discount_price)/(product.price))*100).__round__(2)
+        product.discount_per = percentage
+        product.save()
         
 
     context ={"categories": Categories.objects.all(),

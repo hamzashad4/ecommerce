@@ -93,6 +93,15 @@
 					
 					<div class="single-product-item">
 						<div class="product-image">
+							{% if Product.discount_per != 0 %}
+							<div class="price-box">
+								<div class="inner-price">
+									<span class="price">
+										<strong>{{Product.discount_per}}%</strong> <br> Discount
+									</span>
+								</div>
+							</div>
+							{% endif %}
 							{% if Product.stock_quantity <= 0 %}
 								<H3 class="OutOfStock">Out of Stock</H3>
 							{% endif %}
@@ -136,9 +145,18 @@
 					
 					<div class="single-product-item">
 						<div class="product-image">
+							{% if Product.discount_per != 0 %}
+								<div class="price-box">
+									<div class="inner-price">
+										<span class="price">
+											<strong>{{Product.discount_per}}%</strong> <br> Discount
+										</span>
+									</div>
+								</div>
+							{% endif %}
 							{% if Product.stock_quantity <= 0 %}
-							<H3 class="OutOfStock">Out of Stock</H3>
-						{% endif %}
+								<H3 class="OutOfStock">Out of Stock</H3>
+							{% endif %}
 							<a href="/single-product/{{Product.id}}" width='20px'><img src="{{Product.image.url}}" alt="" ></a>
 						</div>
 						<h3 style="font-size: 18px;">{{Product.name}}</h3>
