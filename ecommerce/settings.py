@@ -11,6 +11,8 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
 from pathlib import Path
+from django_smtp_ssl import SSLEmailBackend
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -214,3 +216,11 @@ JAZZMIN_UI_TWEAKS = {
     },
     "actions_sticky_top": False
 }
+
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.hybridtech.org.pk'  # Replace with your SMTP server (e.g., smtp.gmail.com)
+EMAIL_PORT = 587  # Common SMTP port
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'order@hybridtech.org.pk'  # Your email address
+EMAIL_HOST_PASSWORD = '$6n.8ozps!5t'  # Your email password

@@ -1,9 +1,10 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from .models import *
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.utils import timezone
+from django.core.mail import send_mail
 from django.template.loader import render_to_string
 
 
@@ -14,7 +15,9 @@ def index(request):
     deal = Deal.objects.filter(is_active=True).first()
     percentage = ((((deal.product.price-deal.product.discount_price))/(deal.product.price))*100).__round__(2)
 
-    context ={"categories": Categories.objects.all(),
+    context ={
+            "count": request.data["cart_count"],
+            "categories": Categories.objects.all(),
             "settings": Settings.objects.first(),
                 "brands": Brands.objects.all(), 
                'featured':feature_products,
@@ -28,8 +31,10 @@ def index(request):
 def errorpage(request):
 
 
-    context ={"categories": Categories.objects.all(),
-            "settings": Settings.objects.first(),
+    context ={
+                "count": request.data["cart_count"],
+                "categories": Categories.objects.all(),
+                "settings": Settings.objects.first(),
                 "brands": Brands.objects.all(),
                 "title":"Error Page" 
                }
@@ -37,6 +42,7 @@ def errorpage(request):
 
 def about(request):
     context ={"categories": Categories.objects.all(),
+              "count": request.data["cart_count"],
             "settings": Settings.objects.first(),
                 "brands": Brands.objects.all(), 
                 "title":"About Us"
@@ -67,6 +73,7 @@ def cart(request):
     
         context ={
                     "shipping_charges":request.data["shipping_charges"],
+                    "count": request.data["cart_count"],
                     "grand_total":request.data["grand_total"],
                     "total": request.data["total"],
                     "cart_items": cart_items,
@@ -137,6 +144,7 @@ def checkout(request):
 
         context ={
             "shipping_charges":request.data["shipping_charges"],
+            "count": request.data["cart_count"],
             "grand_total":request.data["grand_total"],
             "total": request.data["total"],
             "cart_items": cart_items,
@@ -176,11 +184,6 @@ def placeOrder(request):
             order = Order.objects.create(user=request.user, cart_id=cart.id, first_name=first_name, last_name=last_name, email=email, phone=phone, country=country, city=city, zip=zip, address=address, note=note,payment=payment, cost=cost, price=price, profit=profit, total=request.data["total"])
        else:
            order = Order.objects.create(cart_id=cart.id, first_name=first_name, last_name=last_name, email=email, phone=phone, country=country, city=city, zip=zip, address=address, note=note,payment=payment, cost=cost, price=price, profit=profit, total=request.data["total"])
-       context = {
-                    "order":order,
-                    "cart_items": cart_items,
-                    "settings": Settings.objects.first(),
-               }
        
 
        for item in cart_items:
@@ -196,6 +199,31 @@ def placeOrder(request):
            product.stock_quantity -= item.quantity
            product.save()
 
+       order_items = OrderItems.objects.filter(order_id = order.id) 
+       sub_total = 0
+       for item in order_items:
+        sub_total += item.total
+       if sub_total >= 1500:
+        shipping_charges = 0
+       else:
+        shipping_charges = 100
+    
+       grand_total = sub_total+shipping_charges    
+       context={
+           
+            "sub_total":sub_total,
+            "count": request.data["cart_count"],
+            "shipping_charges":shipping_charges,
+            "grand_total":grand_total,
+           "order_items": order_items,
+            "settings": Settings.objects.first(),
+            "order":order,
+            'recipient_name':first_name,
+        }
+       subject = 'Your Order Successfully Received'
+       message = render_to_string('ecommerceapp/invoice.html', context)
+       send_mail(subject,message,'order@hybridtech.org.pk',[email],html_message=message,
+            )
 
        cart_items.delete()  
        if request.user.is_authenticated:
@@ -222,6 +250,7 @@ def invoice_view(request, order_id):
 
     context = {
                     "sub_total":sub_total,
+                    "count": request.data["cart_count"],
                     "shipping_charges":shipping_charges,
                     "grand_total":grand_total,
                     "order":order,
@@ -239,6 +268,7 @@ def tracking(request):
         orders = False
     context ={
             "orders":orders,
+            "count": request.data["cart_count"],
             "categories": Categories.objects.all(),
             "settings": Settings.objects.first(),
                 "brands": Brands.objects.all(), 
@@ -248,10 +278,9 @@ def tracking(request):
 def order_track(request):
     query = request.GET.get('order_number')
     orders = Order.objects.filter(id=query)
-    # order_items = OrderItems.objects.filter(order_id=orders.id)
     context ={
                 "orders":orders,
-                # "order_items":order_items,
+                "count": request.data["cart_count"],
                 "categories": Categories.objects.all(),
                 "settings": Settings.objects.first(),
                 "brands": Brands.objects.all(), 
@@ -261,6 +290,7 @@ def order_track(request):
 
 def contact(request):
     context ={"categories": Categories.objects.all(),
+              "count": request.data["cart_count"],
             "settings": Settings.objects.first(),
                 "brands": Brands.objects.all(), 
                 "title":"Contact Us",
@@ -280,6 +310,7 @@ def shop(request):
         
 
     context ={"categories": Categories.objects.all(),
+              "count": request.data["cart_count"],
             "settings": Settings.objects.first(),
                 "brands": Brands.objects.all(), 
                'products':products,
@@ -290,6 +321,7 @@ def shop(request):
 def shop_category(request, category_id):
     products = Products.objects.filter(category_id=category_id, is_active=True)
     context ={"categories": Categories.objects.all(),
+              "count": request.data["cart_count"],
             "settings": Settings.objects.first(),
                 "brands": Brands.objects.all(), 
                'products':products,
@@ -301,6 +333,7 @@ def shop_search(request):
     query = request.GET.get('search')
     products = Products.objects.filter(name__icontains=query, is_active=True)
     context ={"categories": Categories.objects.all(),
+              "count": request.data["cart_count"],
                 "settings": Settings.objects.first(),
                 "brands": Brands.objects.all(), 
                'products':products,
@@ -311,6 +344,7 @@ def shop_search(request):
 def single_news(request):
     context ={"categories": Categories.objects.all(),
             "settings": Settings.objects.first(),
+            "count": request.data["cart_count"],
                 "brands": Brands.objects.all(),
                 "title":"News", 
                }
@@ -324,6 +358,7 @@ def single_product(request, id):
     context={
         "categories": Categories.objects.all(),
         "settings": Settings.objects.first(),
+        "count": request.data["cart_count"],
         "brands": Brands.objects.all(), 
         "products":products,
         'related_prods':related_prods,

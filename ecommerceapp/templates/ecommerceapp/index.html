@@ -92,16 +92,13 @@
 				<div class="col-lg-4 col-md-6 text-center">
 					
 					<div class="single-product-item">
-						{% if Product.stock_quantity <= 0 %}
-							<H3 class="OutOfStock">Out of Stock</H3>
-						{% endif %}
 						<div class="product-image">
+							{% if Product.stock_quantity <= 0 %}
+								<H3 class="OutOfStock">Out of Stock</H3>
+							{% endif %}
 							<a href="/single-product/{{Product.id}}" width='20px'><img src="{{Product.image.url}}" alt="" ></a>
 						</div>
 						<h3 style="font-size: 18px;">{{Product.name}}</h3>
-						{% if Product.stock_quantity > 0 %}
-							<p style="color: red;">Available in stock</p>
-						{% endif %}
 						{% if Product.discount_price > 0 %}
 							<p class="product-price"><span><del>Rs. {{Product.price}}</del></span></p>
 							<p class="product-price"><span>Rs. {{Product.discount_price}}</span> </p>
@@ -112,7 +109,6 @@
 						{% if Product.stock_quantity > 0 %}
 							<a href="/cart/add/{{Product.id}}" class="cart-btn"><i class="fas fa-shopping-cart"></i> Add to Cart</a>
 						{% else %}
-							<br>
 							<a href="/shop" class="cart-btn"><i class="fas fa-shopping-cart"></i>Out Of Order</a>
 						{% endif %}
 					</div>
@@ -139,16 +135,14 @@
 				<div class="col-lg-4 col-md-6 text-center">
 					
 					<div class="single-product-item">
-						{% if Product.stock_quantity <= 0 %}
+						<div class="product-image">
+							{% if Product.stock_quantity <= 0 %}
 							<H3 class="OutOfStock">Out of Stock</H3>
 						{% endif %}
-						<div class="product-image">
 							<a href="/single-product/{{Product.id}}" width='20px'><img src="{{Product.image.url}}" alt="" ></a>
 						</div>
 						<h3 style="font-size: 18px;">{{Product.name}}</h3>
-						{% if Product.stock_quantity > 0 %}
-							<p style="color: red;">Available in stock</p>
-						{% endif %}
+						<p></p>
 						{% if Product.discount_price > 0 %}
 							<p class="product-price"><span><del>Rs. {{Product.price}}</del></span></p>
 							<p class="product-price"><span>Rs. {{Product.discount_price}}</span> </p>
@@ -159,7 +153,6 @@
 						{% if Product.stock_quantity > 0 %}
 							<a href="/cart/add/{{Product.id}}" class="cart-btn"><i class="fas fa-shopping-cart"></i> Add to Cart</a>
 						{% else %}
-							<br>
 							<a href="/shop" class="cart-btn"><i class="fas fa-shopping-cart"></i>Out Of Order</a>
 						{% endif %}
 					</div>

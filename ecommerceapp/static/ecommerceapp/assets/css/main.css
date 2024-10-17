@@ -2438,6 +2438,7 @@ ul.social-link-team li a {
 }
 
 .product-image {
+  position: relative;
   padding: 10px;
   padding-bottom: 0;
 }
@@ -2806,14 +2807,18 @@ table.order-details tbody td {
 
 
 .OutOfStock{
+  top: 10%;
+  position: absolute;
   font-family: 'Courier New', Courier, monospace;
-  width: 100%;
+  width: 50%;
+  right: 0%;
   background-color: red;
   color: white;
   rotate: 30;
   text-align: center;
-  border-top-right-radius: 7px;
-  border-top-left-radius: 7px;
+  border-top-left-radius: 50px;
+  border-bottom-left-radius: 50px;
+ 
 }
 
 /* Dropdown Button */
@@ -2963,4 +2968,9 @@ table.order-details tbody td {
   background-color:#fcf9f9;
   padding-top: 90px;
   padding-bottom: 90px;
+}
+
+.cart-badge{
+  top: 10px;
+  right: 5px;
 }

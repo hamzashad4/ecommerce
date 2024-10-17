@@ -28,7 +28,7 @@
 </div>
 
 
-<div class="container mt-5">
+<div class="container mt-5 mb-5">
     <!-- Order Details Table -->
     <div class="card">
         <div class="card-body">
@@ -40,7 +40,6 @@
                         <th>Reciver Name</th>
                         <th>Status</th>
                         <th>Total Amount</th>
-                        <th>Estimated Delivery</th>
                         <th>Invoice</th>
                     </tr>
                 </thead>
@@ -52,7 +51,6 @@
                         <td>{{order.first_name}} {{order.last_name}}</td>
                         <td>{{order.status}}</td>
                         <td>Rs. {{order.price}}</td>
-                        <td>Within 3-4 hrs</td>
                         
                         <td><a href="/invoice/{{order.id}}">Order Detail</a></td>
                     </tr>
